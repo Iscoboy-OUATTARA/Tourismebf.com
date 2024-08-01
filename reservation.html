@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation d'Hôtel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007BFF;
+            text-align: center;
+        }
+        label {
+            font-weight: 500;
+            margin-top: 15px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+            margin: 20px 0;
+            text-align: right;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
+        nav ul {
+    list-style-type: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+    <script>
+        function calculerTotal() {
+            const dateArrivee = new Date(document.getElementById('date_arrivee').value);
+            const dateDepart = new Date(document.getElementById('date_depart').value);
+            const categorieChambre = document.getElementById('categorie_chambre').value;
+
+            const prixParNuit = {
+                A: 150,
+                B: 100,
+                C: 50
+            };
+
+            if (dateDepart <= dateArrivee) {
+                document.getElementById('error-date').style.display = 'block';
+                document.getElementById('total').textContent = 'Total : 0 €';
+            } else {
+                document.getElementById('error-date').style.display = 'none';
+                const differenceEnJours = (dateDepart - dateArrivee) / (1000 * 60 * 60 * 24);
+                const total = differenceEnJours * prixParNuit[categorieChambre];
+                document.getElementById('total').textContent = 'Total : ' + total + ' €';
+            }
+        }
+
+        function validerFormulaire() {
+            const form = document.getElementById('reservation-form');
+            form.addEventListener('submit', function(event) {
+                if (document.getElementById('error-date').style.display === 'block') {
+                    event.preventDefault();
+                    alert("Veuillez corriger les erreurs dans le formulaire avant de soumettre.");
+                }
+            });
+        }
+
+        window.onload = validerFormulaire;
+    </script>
+        <link rel="stylesheet" href="Acceuil 1 CSS.css">
+
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="Acceuil 1.html">Accueil</a></li>
+                <li><a href="Patrimoine.html">Patrimoine</a></li>
+                <li><a href="reservation.html">reservation d'hotel</a></li>
+                <li><a href="A-propos.html">À propos</a></li>
+                <li><a href="Contact.html">Contact</a></li>
+            </ul>
+        </nav>
+
+    </header>
+    <div class="container">
+        <h1>Réservation d'Hôtel</h1>
+        <form id="reservation-form" action="confirmation.html" method="POST">
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom" required>
+
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="telephone">Téléphone :</label>
+            <input type="tel" id="telephone" name="telephone" required>
+
+            <label for="date_arrivee">Date d'arrivée :</label>
+            <input type="date" id="date_arrivee" name="date_arrivee" required onchange="calculerTotal()">
+
+            <label for="date_depart">Date de départ :</label>
+            <input type="date" id="date_depart" name="date_depart" required onchange="calculerTotal()">
+            <p id="error-date" class="error">La date de départ doit être après la date d'arrivée.</p>
+
+            <label for="categorie_chambre">Catégorie de Chambre :</label>
+            <select id="categorie_chambre" name="categorie_chambre" required onchange="calculerTotal()">
+                <option value="A">Chambre A - 150€/nuit</option>
+                <option value="B">Chambre B - 100€/nuit</option>
+                <option value="C">Chambre C - 50€/nuit</option>
+            </select>
+
+            <label for="commentaires">Commentaires :</label>
+            <textarea id="commentaires" name="commentaires" rows="4"></textarea>
+
+            <div id="total" class="total">Total : 0 €</div>
+
+            <input type="submit" value="Réserver">
+        </form>
+    </div>
+</body>
+</html>
